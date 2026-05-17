@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>张云 · AI产品运营作品集</title>
+<title>寮犱簯 路 AI浜у搧杩愯惀浣滃搧闆?/title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -11,8 +11,7 @@
 html{scroll-behavior:smooth;font-size:16px}
 body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue','PingFang SC','Microsoft YaHei',sans-serif;color:var(--text-primary);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.47059}
 
-
-.scroll-progress{position:fixed;bottom:0;left:0;height:3px;z-index:200;background:linear-gradient(90deg,var(--accent-blue),var(--accent-gold));width:0%;transition:width .1s linear}
+#particle-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1}
 
 nav{position:fixed;top:0;left:0;right:0;height:var(--nav-height);background:rgba(255,255,255,0.88);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid rgba(0,0,0,0.06);z-index:100;display:flex;align-items:center;justify-content:center;transition:transform .4s}
 .nav-inner{width:min(var(--max-width),90vw);display:flex;justify-content:space-between;align-items:center}
@@ -23,27 +22,24 @@ nav{position:fixed;top:0;left:0;right:0;height:var(--nav-height);background:rgba
 .nav-links a:hover{color:var(--text-primary)}.nav-links a:hover::after{width:100%}
 
 .hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 24px 80px;background:linear-gradient(180deg,#fff 0%,#f5f5f7 100%);overflow:hidden}
-.hero-title-group{position:relative;z-index:1;perspective:1200px}.hero-title-group h1{transform-style:preserve-3d;transition:transform .08s ease-out}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:100px;background:linear-gradient(135deg,rgba(0,113,227,0.08),rgba(212,175,55,0.08));border:1px solid rgba(212,175,55,0.15);color:var(--accent-blue);font-size:.85rem;font-weight:500;letter-spacing:.02em;margin-bottom:28px;opacity:0;animation:fadeUp .8s .2s forwards}
 .hero h1{font-size:clamp(2.8rem,7vw,5rem);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin-bottom:16px;opacity:0;animation:fadeUpScale 1s .4s forwards}
 .hero h1 .highlight-blue{background:linear-gradient(135deg,#0071e3,#5ac8fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero h1 .highlight-gold{background:linear-gradient(135deg,#d4af37,#f5e6b8,#d4af37);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite}
 @keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:100px;background:linear-gradient(135deg,rgba(0,113,227,0.08),rgba(212,175,55,0.08));border:1px solid rgba(212,175,55,0.15);color:var(--accent-blue);font-size:.85rem;font-weight:500;letter-spacing:.02em;margin-bottom:28px;opacity:0;animation:fadeUp .8s .2s forwards}
 .hero-sub{font-size:clamp(1.1rem,2vw,1.5rem);color:var(--text-secondary);max-width:680px;margin:0 auto 32px;line-height:1.6;opacity:0;animation:fadeUp .8s .6s forwards}
 .hero-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .8s .8s forwards}
 .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:980px;background:linear-gradient(135deg,var(--accent-blue),#3a8cff);color:#fff;text-decoration:none;font-size:.95rem;font-weight:500;transition:all .3s;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(0,113,227,0.3)}
 .btn-primary:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 6px 20px rgba(0,113,227,0.4)}
 .btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:980px;background:transparent;color:var(--text-primary);text-decoration:none;font-size:.95rem;font-weight:500;border:1.5px solid rgba(0,0,0,0.12);transition:all .3s}
 .btn-secondary:hover{border-color:var(--accent-gold);transform:translateY(-2px)}
+
 .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:60px;width:min(var(--max-width),90vw);opacity:0;animation:fadeUp .8s 1s forwards}
-.hero-stat{text-align:center;padding:24px 12px;background:rgba(255,255,255,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius);border:1px solid rgba(212,175,55,0.1);transition:all .4s;cursor:default}
+.hero-stat{text-align:center;padding:24px 12px;background:rgba(255,255,255,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:var(--radius);border:1px solid rgba(212,175,55,0.1);transition:all .4s}
 .hero-stat:hover{transform:translateY(-6px);border-color:rgba(212,175,55,0.3);box-shadow:0 8px 32px rgba(212,175,55,0.1)}
 .hero-stat .num{font-size:2rem;font-weight:700;background:linear-gradient(135deg,var(--accent-blue),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-block;transition:transform .3s}
 .hero-stat:hover .num{transform:scale(1.08)}
 .hero-stat .label{font-size:.78rem;color:var(--text-secondary);margin-top:4px}
-.hero-interactive-hint{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-tertiary);font-size:.6rem;letter-spacing:.1em;opacity:0;animation:fadeUp 1s 2s forwards}
-.hero-interactive-hint span{animation:pulseHint 2s ease-in-out infinite}
-@keyframes pulseHint{0%,100%{opacity:.3}50%{opacity:.8}}
 
 section{position:relative;z-index:2;padding:100px 24px}
 .section-inner{width:min(var(--max-width),90vw);margin:0 auto}
@@ -59,6 +55,7 @@ section{position:relative;z-index:2;padding:100px 24px}
 .project-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 12px 40px rgba(0,0,0,0.1)}
 .project-card:active{transform:scale(0.97)}
 .project-card .tag{display:inline-block;padding:3px 10px;border-radius:6px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.tag-sop{background:linear-gradient(135deg,#fff8e1,#ffe082);color:#f57f17}
 .tag-shixing{background:linear-gradient(135deg,#e8f0fe,#d4e4ff);color:#1a73e8}
 .tag-netease{background:linear-gradient(135deg,#fce8e6,#ffd5d0);color:#d93025}
 .tag-meituan{background:linear-gradient(135deg,#e6f4ea,#c8e6d4);color:#137333}
@@ -71,30 +68,6 @@ section{position:relative;z-index:2;padding:100px 24px}
 .project-metric .val{font-size:1.1rem;font-weight:700;word-break:break-all}
 .project-metric .val.green{color:#137333}.project-metric .val.blue{color:#1a73e8}.project-metric .val.red{color:#d93025}
 .project-metric .lbl{font-size:.7rem;color:var(--text-tertiary);margin-top:2px}
-
-/* Modal */
-.modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);justify-content:center;align-items:center;padding:24px;opacity:0;transition:opacity .4s cubic-bezier(.25,.46,.45,.94)}
-.modal-overlay.open{display:flex;opacity:1}
-.modal-box{background:linear-gradient(135deg,#fff,#fafafa);border-radius:24px;max-width:780px;width:100%;max-height:85vh;overflow-y:auto;overflow-x:hidden;padding:40px 32px;position:relative;transform:scale(0.8) translateY(30px) rotateX(5deg);transition:transform .5s cubic-bezier(.34,1.56,.64,1);box-shadow:0 32px 100px rgba(0,0,0,0.2),0 0 40px rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.08)}
-.modal-overlay.open .modal-box{transform:scale(1) translateY(0) rotateX(0deg)}
-.modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:none;background:var(--section-bg);color:var(--text-secondary);font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;z-index:1}
-.modal-close:hover{background:#e8e8ed;color:var(--text-primary);transform:rotate(90deg)}
-.modal-box::-webkit-scrollbar{width:4px}.modal-box::-webkit-scrollbar-track{background:transparent}.modal-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.modal-tag{display:inline-block;padding:4px 12px;border-radius:6px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
-.modal-tag.shixing{background:#e8f0fe;color:#1a73e8}.modal-tag.netease{background:#fce8e6;color:#d93025}.modal-tag.meituan{background:#e6f4ea;color:#137333}
-.modal-company{font-size:.82rem;color:var(--text-secondary);margin-bottom:4px}
-.modal-box h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
-.modal-box h2 .hl{background:linear-gradient(135deg,var(--accent-blue),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.modal-desc{font-size:.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:18px;word-break:break-word;overflow-wrap:break-word}
-.modal-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
-.modal-metric{background:var(--section-bg);border-radius:12px;padding:16px 12px;text-align:center}
-.modal-metric .val{font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--accent-blue),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;word-break:break-word}
-.modal-metric .lbl{font-size:.8rem;color:var(--text-secondary);margin-top:3px}
-.modal-metric .note{font-size:.68rem;color:var(--text-tertiary);margin-top:1px}
-.modal-details{border-top:1px solid var(--border);padding-top:16px}
-.modal-detail-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
-.modal-detail-item .icon{font-size:1rem;flex-shrink:0;margin-top:1px}
-.modal-detail-item .text{font-size:.8rem;color:var(--text-secondary);line-height:1.5;word-break:break-word;overflow-wrap:break-word}
 
 .sop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin-top:40px}
 .sop-card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--card-shadow);border:1px solid rgba(0,0,0,0.04);padding:28px;opacity:0;transform:translateY(30px);transition:all .6s}
@@ -161,44 +134,102 @@ footer .copy{margin-top:48px;font-size:.72rem;color:#6e6e73}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeUpScale{from{opacity:0;transform:translateY(30px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);justify-content:center;align-items:center;padding:24px;opacity:0;transition:opacity .35s}
+.modal-overlay.open{display:flex;opacity:1}
+.modal-box{background:#fff;border-radius:20px;max-width:780px;width:100%;max-height:85vh;overflow-y:auto;overflow-x:hidden;padding:36px 28px;position:relative;transform:scale(0.85) translateY(20px);transition:transform .4s cubic-bezier(.25,.46,.45,.94);box-shadow:0 24px 80px rgba(0,0,0,0.15)}
+.modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
+.modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:none;background:var(--section-bg);color:var(--text-secondary);font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:#e8e8ed;color:var(--text-primary);transform:rotate(90deg)}
+.modal-box::-webkit-scrollbar{width:4px}.modal-box::-webkit-scrollbar-track{background:transparent}.modal-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.modal-tag{display:inline-block;padding:4px 12px;border-radius:6px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.modal-tag.shixing{background:#e8f0fe;color:#1a73e8}.modal-tag.netease{background:#fce8e6;color:#d93025}.modal-tag.meituan{background:#e6f4ea;color:#137333}
+.modal-company{font-size:.82rem;color:var(--text-secondary);margin-bottom:4px}
+.modal-box h2{font-size:1.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:14px}
+.modal-box h2 .hl{background:linear-gradient(135deg,var(--accent-blue),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.modal-desc{font-size:.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:18px;word-break:break-word;overflow-wrap:break-word}
+.modal-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}
+.modal-metric{background:var(--section-bg);border-radius:12px;padding:16px 12px;text-align:center}
+.modal-metric .val{font-size:1.4rem;font-weight:700;background:linear-gradient(135deg,var(--accent-blue),var(--accent-gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;word-break:break-word}
+.modal-metric .lbl{font-size:.8rem;color:var(--text-secondary);margin-top:3px}
+.modal-metric .note{font-size:.68rem;color:var(--text-tertiary);margin-top:1px}
+.modal-details{border-top:1px solid var(--border);padding-top:16px}
+.modal-detail-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.modal-detail-item .icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.modal-detail-item .text{font-size:.8rem;color:var(--text-secondary);line-height:1.5;word-break:break-word;overflow-wrap:break-word}
+
 @media(max-width:900px){.hero-stats{grid-template-columns:repeat(2,1fr)}.charts-grid{grid-template-columns:1fr}.data-wall{grid-template-columns:repeat(2,1fr)}.nav-links{display:none}}
 @media(max-width:600px){.hero-stats{grid-template-columns:repeat(2,1fr);gap:12px}section{padding:56px 16px}.project-grid{grid-template-columns:1fr}.data-wall{grid-template-columns:repeat(2,1fr)}.hero-stat .num{font-size:1.5rem}.data-wall-item .val{font-size:1.8rem}.timeline-item{padding:16px}.modal-box{padding:28px 20px}.modal-metrics{grid-template-columns:1fr}.modal-box h2{font-size:1.2rem}}
 </style>
 </head>
 <body>
 
-<div class="scroll-progress" id="scrollProgress"></div>
+<canvas id="particle-canvas"></canvas>
 
-<nav><div class="nav-inner"><span class="nav-logo">张云 · 作品集</span><ul class="nav-links"><li><a href="#projects">项目</a></li><li><a href="#sop">SOP</a></li><li><a href="#data">数据</a></li><li><a href="#skills">能力</a></li><li><a href="#contact">联系</a></li></ul></div></nav>
+<nav><div class="nav-inner"><span class="nav-logo">寮犱簯 路 浣滃搧闆?/span><ul class="nav-links"><li><a href="#projects">椤圭洰</a></li><li><a href="#sop">SOP</a></li><li><a href="#data">鏁版嵁</a></li><li><a href="#skills">鑳藉姏</a></li><li><a href="#contact">鑱旂郴</a></li></ul></div></nav>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal"><div class="modal-box" id="modalBox"><button class="modal-close" onclick="closeModal()">&times;</button><div id="modalContent"></div></div></div>
+<div class="modal-overlay" id="modal"><div class="modal-box" id="modalBox"><button class="modal-close" onclick="closeModal()">鉁?/button><div id="modalContent"></div></div></div>
 
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-badge">🎯 AI产品运营 · 用户增长方向</div>
-  <div class="hero-title-group" id="heroTitle"><h1>用 <span class="highlight-blue">AI</span> 驱动增长<br>用 <span class="highlight-gold">数据</span> 做决策</h1></div>
-  <p class="hero-sub">1500+核心月活 · 28%社群转化率 · 流失率降低27%<br>三个实战项目 + 完整SOP体系，验证AI驱动的用户运营方法论</p>
-  <div class="hero-actions"><a href="#projects" class="btn-primary">查看项目 ↓</a><a href="#sop" class="btn-secondary">查看SOP ↓</a></div>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="num" data-target="1500">0+</div><div class="label">核心月活</div></div>
-    <div class="hero-stat"><div class="num" data-target="2500">0+</div><div class="label">私域社群</div></div>
-    <div class="hero-stat"><div class="num" data-target="27">0%</div><div class="label">流失率下降</div></div>
-    <div class="hero-stat"><div class="num" data-target="28">0%</div><div class="label">社群转化率</div></div>
+  <div class="hero-badge">馃幆 AI浜у搧杩愯惀 路 鐢ㄦ埛澧為暱鏂瑰悜</div>
+  <h1>鐢?<span class="highlight-blue">AI</span> 椹卞姩澧為暱<br>鐢?<span class="highlight-gold">鏁版嵁</span> 鍋氬喅绛?/h1>
+  <p class="hero-sub">1500+鏍稿績鏈堟椿 路 28%绀剧兢杞寲鐜?路 娴佸け鐜囬檷浣?7%<br>涓変釜瀹炴垬椤圭洰 + 瀹屾暣SOP浣撶郴锛岄獙璇丄I椹卞姩鐨勭敤鎴疯繍钀ユ柟娉曡</p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">鏌ョ湅椤圭洰 鈫?/a>
+    <a href="#sop" class="btn-secondary">鏌ョ湅SOP 鈫?/a>
   </div>
-  <div class="hero-interactive-hint"><span>✦ 移动鼠标 · 标题跟随转动 ✦</span></div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num" data-target="1500">0+</div><div class="label">鏍稿績鏈堟椿</div></div>
+    <div class="hero-stat"><div class="num" data-target="2500">0+</div><div class="label">绉佸煙绀剧兢</div></div>
+    <div class="hero-stat"><div class="num" data-target="27">0%</div><div class="label">娴佸け鐜囦笅闄?/div></div>
+    <div class="hero-stat"><div class="num" data-target="28">0%</div><div class="label">绀剧兢杞寲鐜?/div></div>
+  </div>
 </section>
 
 <!-- Projects -->
 <section id="projects" style="background:var(--section-bg);">
   <div class="section-inner">
     <div class="section-label">Projects</div>
-    <h2 class="section-title">实战项目</h2>
-    <p class="section-desc">三个覆盖 B2C SaaS、游戏、社区电商 的完整项目，<strong>点击卡片查看完整详情</strong></p>
+    <h2 class="section-title">瀹炴垬椤圭洰</h2>
+    <p class="section-desc">涓変釜瑕嗙洊 B2C SaaS銆佹父鎴忋€佺ぞ鍖虹數鍟?鐨勫畬鏁撮」鐩紝鐐瑰嚮鍗＄墖鏌ョ湅璇︽儏</p>
     <div class="project-grid">
-      <div class="project-card" data-project="shixing"><span class="tag tag-shixing">B2C SaaS</span><div class="company">势行网络 · 2024.12 – 2026.03</div><h3>AI智能酒店 · 用户运营体系</h3><p>从0到1冷启动，5000元预算实现增长破局。AI洞察驱动的用户运营体系，搭建内容矩阵、私域转化链、会员体系。</p><div class="project-metrics"><div class="project-metric"><div class="val blue">1500</div><div class="lbl">核心月活</div></div><div class="project-metric"><div class="val blue">12元</div><div class="lbl">引流成本/单</div></div><div class="project-metric"><div class="val green">28%</div><div class="lbl">月活提升</div></div><div class="project-metric"><div class="val green">30%</div><div class="lbl">复购率</div></div></div></div>
-      <div class="project-card" data-project="netease"><span class="tag tag-netease">游戏</span><div class="company">网易 · 2024.06 – 2024.09</div><h3>燕云 · AI辅助诊断与A/B实验</h3><p>流失率55%→40%，次日留存45%→70%。NLP分析+行为漏斗交叉定位流失根因。</p><div class="project-metrics"><div class="project-metric"><div class="val red">55%→40%</div><div class="lbl">流失率降27%</div></div><div class="project-metric"><div class="val green">45%→70%</div><div class="lbl">次日留存</div></div><div class="project-metric"><div class="val blue">10,000</div><div class="lbl">A/B样本量</div></div><div class="project-metric"><div class="val blue">+25%</div><div class="lbl">团队效率</div></div></div></div>
-      <div class="project-card" data-project="meituan"><span class="tag tag-meituan">社区电商</span><div class="company">美团优选 · 2021.10 – 2023.05</div><h3>AI赋能私域社群冷启动</h3><p>1所高校扩展到3所，月销售额0到10万+。2500+社群，28%转化率。</p><div class="project-metrics"><div class="project-metric"><div class="val blue">2500+</div><div class="lbl">社群规模</div></div><div class="project-metric"><div class="val green">28%</div><div class="lbl">社群转化率</div></div><div class="project-metric"><div class="val green">35%</div><div class="lbl">复购率</div></div><div class="project-metric"><div class="val blue">10万+</div><div class="lbl">月均销售额</div></div></div></div>
+      <div class="project-card" data-project="shixing">
+        <span class="tag tag-shixing">B2C SaaS</span>
+        <div class="company">鍔胯缃戠粶 路 2024.12 鈥?2026.03</div>
+        <h3>AI鏅鸿兘閰掑簵 路 鐢ㄦ埛杩愯惀浣撶郴</h3>
+        <p>浠?鍒?鍐峰惎鍔紝5000鍏冮绠楀疄鐜板闀跨牬灞€銆侫I娲炲療椹卞姩鐨勭敤鎴疯繍钀ヤ綋绯伙紝鎼缓鍐呭鐭╅樀銆佺鍩熻浆鍖栭摼銆佷細鍛樹綋绯汇€?/p>
+        <div class="project-metrics">
+          <div class="project-metric"><div class="val blue">1500</div><div class="lbl">鏍稿績鏈堟椿</div></div>
+          <div class="project-metric"><div class="val blue">12鍏?/div><div class="lbl">寮曟祦鎴愭湰/鍗?/div></div>
+          <div class="project-metric"><div class="val green">28%</div><div class="lbl">鏈堟椿鎻愬崌</div></div>
+          <div class="project-metric"><div class="val green">30%</div><div class="lbl">澶嶈喘鐜?/div></div>
+        </div>
+      </div>
+      <div class="project-card" data-project="netease">
+        <span class="tag tag-netease">娓告垙</span>
+        <div class="company">缃戞槗 路 2024.06 鈥?2024.09</div>
+        <h3>鐕曚簯 路 AI杈呭姪璇婃柇涓嶢/B瀹為獙</h3>
+        <p>娴佸け鐜?5%鈫?0%锛屾鏃ョ暀瀛?5%鈫?0%銆侼LP鍒嗘瀽+琛屼负婕忔枟浜ゅ弶瀹氫綅娴佸け鏍瑰洜銆?/p>
+        <div class="project-metrics">
+          <div class="project-metric"><div class="val red">55%鈫?0%</div><div class="lbl">娴佸け鐜囬檷27%</div></div>
+          <div class="project-metric"><div class="val green">45%鈫?0%</div><div class="lbl">娆℃棩鐣欏瓨</div></div>
+          <div class="project-metric"><div class="val blue">10,000</div><div class="lbl">A/B鏍锋湰閲?/div></div>
+          <div class="project-metric"><div class="val blue">+25%</div><div class="lbl">鍥㈤槦鏁堢巼</div></div>
+        </div>
+      </div>
+      <div class="project-card" data-project="meituan">
+        <span class="tag tag-meituan">绀惧尯鐢靛晢</span>
+        <div class="company">缇庡洟浼橀€?路 2021.10 鈥?2023.05</div>
+        <h3>AI璧嬭兘绉佸煙绀剧兢鍐峰惎鍔?/h3>
+        <p>1鎵€楂樻牎鎵╁睍鍒?鎵€锛屾湀閿€鍞0鍒?0涓?銆?500+绀剧兢锛?8%杞寲鐜囥€?/p>
+        <div class="project-metrics">
+          <div class="project-metric"><div class="val blue">2500+</div><div class="lbl">绀剧兢瑙勬ā</div></div>
+          <div class="project-metric"><div class="val green">28%</div><div class="lbl">绀剧兢杞寲鐜?/div></div>
+          <div class="project-metric"><div class="val green">35%</div><div class="lbl">澶嶈喘鐜?/div></div>
+          <div class="project-metric"><div class="val blue">10涓?</div><div class="lbl">鏈堝潎閿€鍞</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -207,21 +238,21 @@ footer .copy{margin-top:48px;font-size:.72rem;color:#6e6e73}
 <section id="sop" style="background:var(--section-bg);">
   <div class="section-inner">
     <div class="section-label">SOP Playbook</div>
-    <h2 class="section-title">AI智能酒店用户运营SOP</h2>
-    <p class="section-desc">基于5000元预算·3个月冷启动实战沉淀。新手也能快速上手的完整操作手册。</p>
+    <h2 class="section-title">AI鏅鸿兘閰掑簵鐢ㄦ埛杩愯惀SOP</h2>
+    <p class="section-desc">鍩轰簬5000鍏冮绠椔?涓湀鍐峰惎鍔ㄥ疄鎴樻矇娣€銆傛柊鎵嬩篃鑳藉揩閫熶笂鎵嬬殑瀹屾暣鎿嶄綔鎵嬪唽銆?/p>
     <div class="sop-grid">
-      <div class="sop-card"><div class="step-icon">📊</div><h4>Step 1：多维度数据采集</h4><p>采集12家头部AI酒店1200+条评论。覆盖OTA平台（美团/携程/飞猪）、社交平台（小红书/抖音）、本地生活（大众点评）。</p><span class="sop-tag">Python爬虫</span><span class="sop-tag">手动采集</span><span class="sop-tag">AI辅助</span></div>
-      <div class="sop-card"><div class="step-icon">🔬</div><h4>Step 2：NLP情感分析</h4><p>每条评论情感打分。高频关键词："反应慢"82次、"操作复杂"74次、"华而不实"58次。AI聚类归纳三大核心顾虑。</p><span class="sop-tag">NLP分析</span><span class="sop-tag">关键词提取</span></div>
-      <div class="sop-card"><div class="step-icon">🎯</div><h4>Step 3：RFM用户分层</h4><p>R(入住时间)+F(入住频次)+M(消费金额)5级分层：核心孵化层≥13分/普通激活层9-12分/沉睡唤醒层5-8分/沉默流失层≤4分/新用户层。</p><span class="sop-tag">RFM模型</span><span class="sop-tag">用户分层</span></div>
-      <div class="sop-card"><div class="step-icon">👤</div><h4>Step 4：用户画像输出</h4><p>输出两类核心画像：<strong>商务用户</strong>（效率优先，秒级入住/退房）和<strong>年轻游客</strong>（新奇体验，AI旅拍/社交货币）。</p><span class="sop-tag">用户画像</span><span class="sop-tag">痛点分析</span></div>
-      <div class="sop-card"><div class="step-icon">🤖</div><h4>AI内容生产工作流</h4><p>选题生成→人工确认→AI初稿→人工精调→多平台分发。AI产20选5，Prompt模板可复制。月均120+条内容。</p><span class="sop-tag">AI工作流</span><span class="sop-tag">内容矩阵</span></div>
-      <div class="sop-card"><div class="step-icon">📱</div><h4>多平台内容策略</h4><p>抖音(日更1-2条15-60s短视频)+小红书(日更2-3篇图文)+公众号(周更2篇)+朋友圈(日发3条)。</p><span class="sop-tag">抖音</span><span class="sop-tag">小红书</span><span class="sop-tag">公众号</span></div>
-      <div class="sop-card"><div class="step-icon">🧠</div><h4>心理学驱动转化</h4><p><strong>损失厌恶</strong>：预订页实时倒计时"今日仅剩X间"，转化率提升15%。<strong>社会认同</strong>：嵌入住客真实视频，降低新客决策门槛。</p><span class="sop-tag">心理学</span><span class="sop-tag">A/B测试</span></div>
-      <div class="sop-card"><div class="step-icon">🔄</div><h4>AARRR漏斗+私域转化</h4><p>获客→激活→留存→营收→推荐。欢迎语/催单语/好评引导话术模板可复制。企微自动标签实现精准触达。</p><span class="sop-tag">AARRR</span><span class="sop-tag">私域SOP</span></div>
-      <div class="sop-card"><div class="step-icon">🏆</div><h4>会员体系+智能推荐</h4><p>银卡(首次100积分)→金卡(积分翻倍)→钻石卡(VIP加速)。AI预测复购窗口，首住第25天推券，复购率12%→35%。</p><span class="sop-tag">会员体系</span><span class="sop-tag">智能推荐</span></div>
-      <div class="sop-card"><div class="step-icon">💥</div><h4>用户裂变机制</h4><p>老带新返200积分/人、拼团2人8折3人7折、带图评价返50积分、AI旅拍一键发朋友圈集赞升级。</p><span class="sop-tag">裂变</span><span class="sop-tag">拼团</span><span class="sop-tag">社交裂变</span></div>
-      <div class="sop-card"><div class="step-icon">📋</div><h4>每日执行清单</h4><p>发内容(抖音1+小红书2+朋友圈3)/30min→回评论/20min→群发/10min→监测数据/15min。每日总耗约90分钟。</p><span class="sop-tag">每日SOP</span><span class="sop-tag">执行力</span></div>
-      <div class="sop-card"><div class="step-icon">❓</div><h4>常见问题QA</h4><p>不会Python也能做NLP(用ChatGPT直接提问)。5000元预算够用。私域没人进群？每个触点放引流入口。</p><span class="sop-tag">新手友好</span><span class="sop-tag">QA</span></div>
+      <div class="sop-card"><div class="step-icon">馃搳</div><h4>Step 1锛氬缁村害鏁版嵁閲囬泦</h4><p>閲囬泦12瀹跺ご閮ˋI閰掑簵1200+鏉¤瘎璁恒€傝鐩朞TA骞冲彴锛堢編鍥?鎼虹▼/椋炵尓锛夈€佺ぞ浜ゅ钩鍙帮紙灏忕孩涔?鎶栭煶锛夈€佹湰鍦扮敓娲伙紙澶т紬鐐硅瘎锛夈€?/p><span class="sop-tag">Python鐖櫕</span><span class="sop-tag">鎵嬪姩閲囬泦</span><span class="sop-tag">AI杈呭姪</span></div>
+      <div class="sop-card"><div class="step-icon">馃敩</div><h4>Step 2锛歂LP鎯呮劅鍒嗘瀽</h4><p>姣忔潯璇勮鎯呮劅鎵撳垎銆傞珮棰戝叧閿瘝锛?鍙嶅簲鎱?82娆°€?鎿嶄綔澶嶆潅"74娆°€?鍗庤€屼笉瀹?58娆°€侫I鑱氱被褰掔撼涓夊ぇ鏍稿績椤捐檻銆?/p><span class="sop-tag">NLP鍒嗘瀽</span><span class="sop-tag">鍏抽敭璇嶆彁鍙?/span></div>
+      <div class="sop-card"><div class="step-icon">馃幆</div><h4>Step 3锛歊FM鐢ㄦ埛鍒嗗眰</h4><p>R(鍏ヤ綇鏃堕棿)+F(鍏ヤ綇棰戞)+M(娑堣垂閲戦)5绾у垎灞傦細鏍稿績瀛靛寲灞傗墺13鍒?鏅€氭縺娲诲眰9-12鍒?娌夌潯鍞ら啋灞?-8鍒?娌夐粯娴佸け灞傗墹4鍒?鏂扮敤鎴峰眰銆?/p><span class="sop-tag">RFM妯″瀷</span><span class="sop-tag">鐢ㄦ埛鍒嗗眰</span></div>
+      <div class="sop-card"><div class="step-icon">馃懁</div><h4>Step 4锛氱敤鎴风敾鍍忚緭鍑?/h4><p>杈撳嚭涓ょ被鏍稿績鐢诲儚锛?strong>鍟嗗姟鐢ㄦ埛</strong>锛堟晥鐜囦紭鍏堬紝绉掔骇鍏ヤ綇/閫€鎴匡級鍜?strong>骞磋交娓稿</strong>锛堟柊濂囦綋楠岋紝AI鏃呮媿/绀句氦璐у竵锛夈€?/p><span class="sop-tag">鐢ㄦ埛鐢诲儚</span><span class="sop-tag">鐥涚偣鍒嗘瀽</span></div>
+      <div class="sop-card"><div class="step-icon">馃</div><h4>AI鍐呭鐢熶骇宸ヤ綔娴?/h4><p>閫夐鐢熸垚鈫掍汉宸ョ‘璁も啋AI鍒濈鈫掍汉宸ョ簿璋冣啋澶氬钩鍙板垎鍙戙€侫I浜?0閫?锛孭rompt妯℃澘鍙鍒躲€傛湀鍧?20+鏉″唴瀹广€?/p><span class="sop-tag">AI宸ヤ綔娴?/span><span class="sop-tag">鍐呭鐭╅樀</span></div>
+      <div class="sop-card"><div class="step-icon">馃摫</div><h4>澶氬钩鍙板唴瀹圭瓥鐣?/h4><p>鎶栭煶(鏃ユ洿1-2鏉?5-60s鐭棰?+灏忕孩涔?鏃ユ洿2-3绡囧浘鏂?+鍏紬鍙?鍛ㄦ洿2绡?+鏈嬪弸鍦?鏃ュ彂3鏉?銆?/p><span class="sop-tag">鎶栭煶</span><span class="sop-tag">灏忕孩涔?/span><span class="sop-tag">鍏紬鍙?/span></div>
+      <div class="sop-card"><div class="step-icon">馃</div><h4>蹇冪悊瀛﹂┍鍔ㄨ浆鍖?/h4><p><strong>鎹熷け鍘屾伓</strong>锛氶璁㈤〉瀹炴椂鍊掕鏃?浠婃棩浠呭墿X闂?锛岃浆鍖栫巼鎻愬崌15%銆?strong>绀句細璁ゅ悓</strong>锛氬祵鍏ヤ綇瀹㈢湡瀹炶棰戯紝闄嶄綆鏂板鍐崇瓥闂ㄦ銆?/p><span class="sop-tag">蹇冪悊瀛?/span><span class="sop-tag">A/B娴嬭瘯</span></div>
+      <div class="sop-card"><div class="step-icon">馃攧</div><h4>AARRR婕忔枟+绉佸煙杞寲</h4><p>鑾峰鈫掓縺娲烩啋鐣欏瓨鈫掕惀鏀垛啋鎺ㄨ崘銆傛杩庤/鍌崟璇?濂借瘎寮曞璇濇湳妯℃澘鍙鍒躲€備紒寰嚜鍔ㄦ爣绛惧疄鐜扮簿鍑嗚Е杈俱€?/p><span class="sop-tag">AARRR</span><span class="sop-tag">绉佸煙SOP</span></div>
+      <div class="sop-card"><div class="step-icon">馃弳</div><h4>浼氬憳浣撶郴+鏅鸿兘鎺ㄨ崘</h4><p>閾跺崱(棣栨100绉垎)鈫掗噾鍗?绉垎缈诲€?鈫掗捇鐭冲崱(VIP鍔犻€?銆侫I棰勬祴澶嶈喘绐楀彛锛岄浣忕25澶╂帹鍒革紝澶嶈喘鐜?2%鈫?5%銆?/p><span class="sop-tag">浼氬憳浣撶郴</span><span class="sop-tag">鏅鸿兘鎺ㄨ崘</span></div>
+      <div class="sop-card"><div class="step-icon">馃挜</div><h4>鐢ㄦ埛瑁傚彉鏈哄埗</h4><p>鑰佸甫鏂拌繑200绉垎/浜恒€佹嫾鍥?浜?鎶?浜?鎶樸€佸甫鍥捐瘎浠疯繑50绉垎銆丄I鏃呮媿涓€閿彂鏈嬪弸鍦堥泦璧炲崌绾с€?/p><span class="sop-tag">瑁傚彉</span><span class="sop-tag">鎷煎洟</span><span class="sop-tag">绀句氦瑁傚彉</span></div>
+      <div class="sop-card"><div class="step-icon">馃搵</div><h4>姣忔棩鎵ц娓呭崟</h4><p>鍙戝唴瀹?鎶栭煶1+灏忕孩涔?+鏈嬪弸鍦?)/30min鈫掑洖璇勮/20min鈫掔兢鍙?10min鈫掔洃娴嬫暟鎹?15min銆傛瘡鏃ユ€昏€楃害90鍒嗛挓銆?/p><span class="sop-tag">姣忔棩SOP</span><span class="sop-tag">鎵ц鍔?/span></div>
+      <div class="sop-card"><div class="step-icon">鉂?/div><h4>甯歌闂QA</h4><p>涓嶄細Python涔熻兘鍋歂LP(鐢–hatGPT鐩存帴鎻愰棶)銆?000鍏冮绠楀鐢ㄣ€傜鍩熸病浜鸿繘缇わ紵姣忎釜瑙︾偣鏀惧紩娴佸叆鍙ｃ€?/p><span class="sop-tag">鏂版墜鍙嬪ソ</span><span class="sop-tag">QA</span></div>
     </div>
   </div>
 </section>
@@ -230,14 +261,14 @@ footer .copy{margin-top:48px;font-size:.72rem;color:#6e6e73}
 <section id="data">
   <div class="section-inner">
     <div class="section-label">Data Visualization</div>
-    <h2 class="section-title">核心数据可视化</h2>
-    <p class="section-desc">关键指标动态呈现，三个项目的核心数据一览</p>
+    <h2 class="section-title">鏍稿績鏁版嵁鍙鍖?/h2>
+    <p class="section-desc">鍏抽敭鎸囨爣鍔ㄦ€佸憟鐜帮紝涓変釜椤圭洰鐨勬牳蹇冩暟鎹竴瑙?/p>
     <div class="charts-grid">
-      <div class="chart-box" id="chart-projects"><h4>项目核心数据对比</h4><canvas id="chartBar"></canvas><div class="chart-desc">三大项目关键指标横向对比</div></div>
-      <div class="chart-box" id="chart-churn"><h4>流失率优化</h4><canvas id="chartDoughnut"></canvas><div class="chart-desc">网易燕云·1-10级流失率55%→40%</div></div>
-      <div class="chart-box" id="chart-retention"><h4>次日留存提升</h4><canvas id="chartRetention"></canvas><div class="chart-desc">网易燕云·次日留存45%→70%(+25pp)</div></div>
-      <div class="chart-box" id="chart-meituan"><h4>美团增长漏斗</h4><canvas id="chartFunnel"></canvas><div class="chart-desc">社群→首单→复购全链路转化</div></div>
-      <div class="chart-box chart-full" id="chart-radar-box"><h4>AI运营能力雷达</h4><canvas id="chartRadar" style="max-height:320px;"></canvas><div class="chart-desc">数据·AI工具·运营策略·产品思维四维能力</div></div>
+      <div class="chart-box" id="chart-projects"><h4>椤圭洰鏍稿績鏁版嵁瀵规瘮</h4><canvas id="chartBar"></canvas><div class="chart-desc">涓夊ぇ椤圭洰鍏抽敭鎸囨爣妯悜瀵规瘮</div></div>
+      <div class="chart-box" id="chart-churn"><h4>娴佸け鐜囦紭鍖栨晥鏋?/h4><canvas id="chartDoughnut"></canvas><div class="chart-desc">缃戞槗鐕曚簯路1-10绾ф祦澶辩巼55%鈫?0%</div></div>
+      <div class="chart-box" id="chart-retention"><h4>娆℃棩鐣欏瓨鎻愬崌</h4><canvas id="chartRetention"></canvas><div class="chart-desc">缃戞槗鐕曚簯路娆℃棩鐣欏瓨45%鈫?0%(鎻愬崌25pp)</div></div>
+      <div class="chart-box" id="chart-meituan"><h4>缇庡洟绉佸煙澧為暱婕忔枟</h4><canvas id="chartFunnel"></canvas><div class="chart-desc">绀剧兢鈫掗鍗曗啋澶嶈喘鍏ㄩ摼璺浆鍖?/div></div>
+      <div class="chart-box chart-full" id="chart-radar-box"><h4>AI杩愯惀鑳藉姏闆疯揪</h4><canvas id="chartRadar" style="max-height:320px;"></canvas><div class="chart-desc">鏁版嵁路AI宸ュ叿路杩愯惀绛栫暐路浜у搧鎬濈淮鍥涚淮鑳藉姏</div></div>
     </div>
   </div>
 </section>
@@ -246,15 +277,15 @@ footer .copy{margin-top:48px;font-size:.72rem;color:#6e6e73}
 <section id="data-wall" style="background:var(--section-bg);">
   <div class="section-inner">
     <div class="section-label">Achievements</div>
-    <h2 class="section-title">核心成果总览</h2>
-    <p class="section-desc">张云在项目中取得的可量化成果</p>
+    <h2 class="section-title">鏍稿績鎴愭灉鎬昏</h2>
+    <p class="section-desc">寮犱簯鍦ㄩ」鐩腑鍙栧緱鐨勫彲閲忓寲鎴愭灉</p>
     <div class="data-wall">
-      <div class="data-wall-item"><div class="val">1500+</div><div class="lbl">核心月活</div><div class="src">势行</div></div>
-      <div class="data-wall-item"><div class="val">55%→40%</div><div class="lbl">流失率下降27%</div><div class="src">网易</div></div>
-      <div class="data-wall-item"><div class="val">45%→70%</div><div class="lbl">次日留存+25pp</div><div class="src">网易</div></div>
-      <div class="data-wall-item"><div class="val">2500+</div><div class="lbl">私域社群</div><div class="src">美团</div></div>
-      <div class="data-wall-item"><div class="val">28%</div><div class="lbl">社群转化率</div><div class="src">美团</div></div>
-      <div class="data-wall-item"><div class="val">35%</div><div class="lbl">复购率(SOP)</div><div class="src">势行</div></div>
+      <div class="data-wall-item"><div class="val">1500+</div><div class="lbl">鏍稿績鏈堟椿</div><div class="src">鍔胯</div></div>
+      <div class="data-wall-item"><div class="val">55%鈫?0%</div><div class="lbl">娴佸け鐜囦笅闄?7%</div><div class="src">缃戞槗</div></div>
+      <div class="data-wall-item"><div class="val">45%鈫?0%</div><div class="lbl">娆℃棩鐣欏瓨+25pp</div><div class="src">缃戞槗</div></div>
+      <div class="data-wall-item"><div class="val">2500+</div><div class="lbl">绉佸煙绀剧兢</div><div class="src">缇庡洟</div></div>
+      <div class="data-wall-item"><div class="val">28%</div><div class="lbl">绀剧兢杞寲鐜?/div><div class="src">缇庡洟</div></div>
+      <div class="data-wall-item"><div class="val">35%</div><div class="lbl">澶嶈喘鐜?SOP)</div><div class="src">鍔胯</div></div>
     </div>
   </div>
 </section>
@@ -263,12 +294,12 @@ footer .copy{margin-top:48px;font-size:.72rem;color:#6e6e73}
 <section>
   <div class="section-inner">
     <div class="section-label">Experience</div>
-    <h2 class="section-title">职业路径</h2>
-    <p class="section-desc">从校园创业到大厂实习到AI创业，完整的产品运营成长轨迹</p>
+    <h2 class="section-title">鑱屼笟璺緞</h2>
+    <p class="section-desc">浠庢牎鍥垱涓氬埌澶у巶瀹炰範鍒癆I鍒涗笟锛屽畬鏁寸殑浜у搧杩愯惀鎴愰暱杞ㄨ抗</p>
     <div class="timeline">
-      <div class="timeline-item"><div class="date">2024.12–至今</div><h4>势行网络·合伙人/AI运营负责人</h4><p>AI智能酒店渠道运营，5000元预算从0破局。AI内容矩阵(月均120+条)，RFM分层+心理学优化转化链路，沉淀SOP体系。</p></div>
-      <div class="timeline-item"><div class="date">2024.06–2024.09</div><h4>网易·用户增长运营(实习生)</h4><p>独立负责燕云新用户留存优化，A/B测试双组各5000人。NLP分析+行为漏斗定位流失根因，流失率降低27%。</p></div>
-      <div class="timeline-item"><div class="date">2021.10–2023.05</div><h4>美团优选·校园运营负责人</h4><p>校园市场从0到1，覆盖3所高校2500+社群。设计拼团/裂变机制，月销售额10万+，模式被总部参考。</p></div>
+      <div class="timeline-item"><div class="date">2024.12鈥撹嚦浠?/div><h4>鍔胯缃戠粶路鍚堜紮浜?AI杩愯惀璐熻矗浜?/h4><p>AI鏅鸿兘閰掑簵娓犻亾杩愯惀锛?000鍏冮绠椾粠0鐮村眬銆侫I鍐呭鐭╅樀(鏈堝潎120+鏉?锛孯FM鍒嗗眰+蹇冪悊瀛︿紭鍖栬浆鍖栭摼璺紝娌夋穩SOP浣撶郴銆?/p></div>
+      <div class="timeline-item"><div class="date">2024.06鈥?024.09</div><h4>缃戞槗路鐢ㄦ埛澧為暱杩愯惀(瀹炰範鐢?</h4><p>鐙珛璐熻矗鐕曚簯鏂扮敤鎴风暀瀛樹紭鍖栵紝A/B娴嬭瘯鍙岀粍鍚?000浜恒€侼LP鍒嗘瀽+琛屼负婕忔枟瀹氫綅娴佸け鏍瑰洜锛屾祦澶辩巼闄嶄綆27%銆?/p></div>
+      <div class="timeline-item"><div class="date">2021.10鈥?023.05</div><h4>缇庡洟浼橀€壜锋牎鍥繍钀ヨ礋璐ｄ汉</h4><p>鏍″洯甯傚満浠?鍒?锛岃鐩?鎵€楂樻牎2500+绀剧兢銆傝璁℃嫾鍥?瑁傚彉鏈哄埗锛屾湀閿€鍞10涓?锛屾ā寮忚鎬婚儴鍙傝€冦€?/p></div>
     </div>
   </div>
 </section>
@@ -277,77 +308,90 @@ footer .copy{margin-top:48px;font-size:.72rem;color:#6e6e73}
 <section class="skills-section" id="skills">
   <div class="section-inner">
     <div class="section-label">Skills</div>
-    <h2 class="section-title">AI运营能力体系</h2>
-    <p class="section-desc">数据+AI+运营三位一体，构建系统化的运营能力矩阵</p>
+    <h2 class="section-title">AI杩愯惀鑳藉姏浣撶郴</h2>
+    <p class="section-desc">鏁版嵁+AI+杩愯惀涓変綅涓€浣擄紝鏋勫缓绯荤粺鍖栫殑杩愯惀鑳藉姏鐭╅樀</p>
     <div class="skills-grid">
-      <div class="skill-category"><h4>📊 数据能力</h4><div class="skill-item"><div class="skill-name"><span>数据分析/SQL</span><span>95%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:95%"></div></div></div><div class="skill-item"><div class="skill-name"><span>行为路径/漏斗分析</span><span>90%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:90%"></div></div></div><div class="skill-item"><div class="skill-name"><span>A/B实验/统计检验</span><span>88%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:88%"></div></div></div><div class="skill-item"><div class="skill-name"><span>LTV/归因分析</span><span>82%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:82%"></div></div></div></div>
-      <div class="skill-category"><h4>🤖 AI工具力</h4><div class="skill-item"><div class="skill-name"><span>Coze/工作流搭建</span><span>92%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:92%"></div></div></div><div class="skill-item"><div class="skill-name"><span>ChatGPT/Prompt</span><span>90%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:90%"></div></div></div><div class="skill-item"><div class="skill-name"><span>NLP/文本分析</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:85%"></div></div></div><div class="skill-item"><div class="skill-name"><span>Midjourney/AI视觉</span><span>78%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:78%"></div></div></div></div>
-      <div class="skill-category"><h4>🎯 运营策略</h4><div class="skill-item"><div class="skill-name"><span>用户分层/激励体系</span><span>92%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:92%"></div></div></div><div class="skill-item"><div class="skill-name"><span>社群运营/裂变机制</span><span>95%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:95%"></div></div></div><div class="skill-item"><div class="skill-name"><span>内容策略/KOL运营</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:85%"></div></div></div><div class="skill-item"><div class="skill-name"><span>AARRR/RFM模型</span><span>88%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:88%"></div></div></div></div>
-      <div class="skill-category"><h4>💡 产品思维</h4><div class="skill-item"><div class="skill-name"><span>用户调研/竞品分析</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:85%"></div></div></div><div class="skill-item"><div class="skill-name"><span>场景化需求设计</span><span>82%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:82%"></div></div></div><div class="skill-item"><div class="skill-name"><span>Axure/原型设计</span><span>70%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:70%"></div></div></div><div class="skill-item"><div class="skill-name"><span>Scrum/项目推进</span><span>80%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:80%"></div></div></div></div>
+      <div class="skill-category"><h4>馃搳 鏁版嵁鑳藉姏</h4><div class="skill-item"><div class="skill-name"><span>鏁版嵁鍒嗘瀽/SQL</span><span>95%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:95%"></div></div></div><div class="skill-item"><div class="skill-name"><span>琛屼负璺緞/婕忔枟鍒嗘瀽</span><span>90%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:90%"></div></div></div><div class="skill-item"><div class="skill-name"><span>A/B瀹為獙/缁熻妫€楠?/span><span>88%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:88%"></div></div></div><div class="skill-item"><div class="skill-name"><span>LTV/褰掑洜鍒嗘瀽</span><span>82%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:82%"></div></div></div></div>
+      <div class="skill-category"><h4>馃 AI宸ュ叿鍔?/h4><div class="skill-item"><div class="skill-name"><span>Coze/宸ヤ綔娴佹惌寤?/span><span>92%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:92%"></div></div></div><div class="skill-item"><div class="skill-name"><span>ChatGPT/Prompt</span><span>90%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:90%"></div></div></div><div class="skill-item"><div class="skill-name"><span>NLP/鏂囨湰鍒嗘瀽</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:85%"></div></div></div><div class="skill-item"><div class="skill-name"><span>Midjourney/AI瑙嗚</span><span>78%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:78%"></div></div></div></div>
+      <div class="skill-category"><h4>馃幆 杩愯惀绛栫暐</h4><div class="skill-item"><div class="skill-name"><span>鐢ㄦ埛鍒嗗眰/婵€鍔变綋绯?/span><span>92%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:92%"></div></div></div><div class="skill-item"><div class="skill-name"><span>绀剧兢杩愯惀/瑁傚彉鏈哄埗</span><span>95%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:95%"></div></div></div><div class="skill-item"><div class="skill-name"><span>鍐呭绛栫暐/KOL杩愯惀</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:85%"></div></div></div><div class="skill-item"><div class="skill-name"><span>AARRR/RFM妯″瀷</span><span>88%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:88%"></div></div></div></div>
+      <div class="skill-category"><h4>馃挕 浜у搧鎬濈淮</h4><div class="skill-item"><div class="skill-name"><span>鐢ㄦ埛璋冪爺/绔炲搧鍒嗘瀽</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:85%"></div></div></div><div class="skill-item"><div class="skill-name"><span>鍦烘櫙鍖栭渶姹傝璁?/span><span>82%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:82%"></div></div></div><div class="skill-item"><div class="skill-name"><span>Axure/鍘熷瀷璁捐</span><span>70%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:70%"></div></div></div><div class="skill-item"><div class="skill-name"><span>Scrum/椤圭洰鎺ㄨ繘</span><span>80%</span></div><div class="skill-bar"><div class="skill-bar-fill" style="--pct:80%"></div></div></div></div>
     </div>
   </div>
 </section>
 
 <!-- Footer -->
 <footer id="contact">
-  <h2>感谢您的关注</h2>
-  <p>期待与您交流AI产品运营的更多可能</p>
-  <div class="qr-section"><img id="qrImg" alt="QR Code" style="width:120px;height:120px;"><span>扫码在线查看作品集</span></div>
-  <div class="contact"><a href="tel:19291880785">📞 19291880785</a><a href="mailto:1551277878@qq.com">📧 1551277878@qq.com</a><span>📍 浙江·杭州</span></div>
-  <div class="copy">© 2026 张云·AI产品运营作品集·第2版</div>
+  <h2>鎰熻阿鎮ㄧ殑鍏虫敞</h2>
+  <p>鏈熷緟涓庢偍浜ゆ祦AI浜у搧杩愯惀鐨勬洿澶氬彲鑳?/p>
+  <div class="qr-section">
+    <img id="qrImg" alt="QR Code" style="width:120px;height:120px;">
+    <span>鎵爜鍦ㄧ嚎鏌ョ湅浣滃搧闆?/span>
+  </div>
+  <div class="contact">
+    <a href="tel:19291880785">馃摓 19291880785</a>
+    <a href="mailto:1551277878@qq.com">馃摟 1551277878@qq.com</a>
+    <span>馃搷 娴欐睙路鏉窞</span>
+  </div>
+  <div class="copy">漏 2026 寮犱簯路AI浜у搧杩愯惀浣滃搧闆喡风2鐗?/div>
 </footer>
 
 <script>
 // QR Code
-(function(){document.getElementById('qrImg').src='https://quickchart.io/qr?size=240&text='+encodeURIComponent('https://portfolio-deploy.github.io');})();
+(function(){var u='https://portfolio-deploy.github.io';document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(u);})();
 
-// ====== PROJECT DATA ======
-var PD={shixing:{tag:'B2C SaaS',tc:'shixing',co:'势行网络 · 2024.12 – 2026.03',ti:'AI智能酒店 · 用户运营体系',de:'以5000元预算在极端信任壁垒(90%+用户认为AI酒店是噱头)下从0到1冷启动。通过AI洞察驱动+心理学策略，3个月实现月活增长28%、复购率12%→30%、引流成本仅为行业均值60%。',me:[{v:'1500',l:'核心月活(MAU)',n:'峰值月活，提升28%'},{v:'12元',l:'引流成本/单',n:'目标≤20元，行业80元'},{v:'30%',l:'复购率',n:'初期12%翻倍至30%'},{v:'120+',l:'月均AI内容',n:'效率提升3倍'}],dt:[{i:'📊',t:'爬虫采集12家AI酒店1200+条评论，NLP分析提取高频关键词："反应慢"82次、"操作复杂"74次、"华而不实"58次，AI聚类三大核心顾虑'},{i:'🔬',t:'R(最近入住)+F(频次)+M(金额)5级分层：核心孵化层≥13/普通激活层9-12/沉睡唤醒层5-8/沉默流失层≤4/新用户层'},{i:'👤',t:'商务用户(效率优先/秒级入住/智能送物)+年轻游客(新奇体验/AI旅拍/社交货币)，分别匹配携程/飞猪与小红书/抖音渠道'},{i:'🤖',t:'AI生产5步工作流：选题生成(AI产20选5)→人工确认→AI初稿→精调→多平台分发。月均120+条'},{i:'🔥',t:'损失厌恶：预订页"今日仅剩X间AI智能房"实时倒计时，转化率提升15%。社会认同：嵌入住客真实体验视频'},{i:'📈',t:'公域→加企微→入群欢迎(新人99元试住)→社群(限时特惠)→1v1推荐→核销→评价。话术全部标准化'},{i:'🎯',t:'核心词+长尾词+场景词+问题词四层SEO矩阵，知乎/小红书问答布局'}]},
-netease:{tag:'游戏',tc:'netease',co:'网易 · 2024.06 – 2024.09',ti:'燕云 · AI辅助诊断与A/B实验',de:'网易核心游戏"燕云"新用户留存优化，流失率55%(同类均值约35%)。通过NLP分析+全链路行为漏斗交叉定位流失根因，3大优化方案全部通过A/B测试并全量上线。',me:[{v:'55%→40%',l:'流失率下降27%',n:'对照组55%→优化组40%'},{v:'45%→70%',l:'次日留存+25pp',n:'双组各5000人A/B测试'},{v:'10,000',l:'A/B样本量',n:'双组独立，排除重复'},{v:'+25%',l:'团队效率',n:'实验框架沉淀为标准方法论'}],dt:[{i:'📊',t:'从注册到10级细化每个任务/地图转化率。发现"引导过长"而非"难度过高"是根因——行为数据知"哪里"NLP知"为什么"'},{i:'🔍',t:'数千条评论→情感分析→TF-IDF高频词→AI聚类。发现"引导太长"而非"太难"，立即调整方向'},{i:'🛠️',t:'①引导跳过：允许跳过，7天内可回看。②奖励前置：关键奖励从5级调至2级。③难度曲线：前3级降门槛'},{i:'🔬',t:'实验设计→随机分组(双组各5000人排重)→监控(统计功效90%置信度)→分析(中期显著性检验)→报告'},{i:'📈',t:'网易有数平台覆盖留存/流失/任务/社交四大维度。社交行为为核心辅助指标'},{i:'🧠',t:'行为数据知"哪里"用户反馈知"复杂"，两方交叉定位真实流失根因'}]},
-meituan:{tag:'社区电商',tc:'meituan',co:'美团优选 · 2021.10 – 2023.05',ti:'AI赋能私域社群冷启动与增长',de:'大学期间创业项目，从0到1构建校园私域社群。1所高校扩展到3所，月销售额0到10万+，模式被总部参考。',me:[{v:'2500+',l:'社群规模',n:'覆盖3所高校，活跃70%'},{v:'28%',l:'社群转化率',n:'入群45000人，首单12600人'},{v:'35%',l:'复购率',n:'高于平台均值15pp'},{v:'10万+',l:'月均销售额',n:'开学季峰值14.6万'}],dt:[{i:'🎯',t:'开学季7天覆盖60%新生。地推(食堂/宿舍/教学楼)+线上(转发集赞/新生优惠)+种子用户(每楼楼长渗透)'},{i:'📥',t:'标准化入群→每日排期→周期性活动(拼团/秒杀/集赞)→标准化话术库。2500+社群全链路管理'},{i:'🔗',t:'①拼团裂变：1元拼团1周+500社群②老带新：双方优惠券③社交裂变：集赞/宿舍拼单④爆品预警'},{i:'📊',t:'Excel+SQL自动化报表。追踪社群数/活跃率/转化率/复购率/客单价/销售额6大指标'},{i:'🔄',t:'地推被驱赶→扫楼+线上裂变；增长瓶颈→1元拼团；供应链不稳→爆品预警+备选。1所扩展至3所'},{i:'💡',t:'①引入Coze Bot效率2倍②RFM四类差异化运营，预期复购35%→45%+③半自动化看板省5h/周'}]}};
+// Project data
+const projectData={shixing:{tag:'B2C SaaS',tagClass:'shixing',company:'鍔胯缃戠粶 路 2024.12 鈥?2026.03',title:'AI鏅鸿兘閰掑簵 路 鐢ㄦ埛杩愯惀浣撶郴',desc:'浠?000鍏冮绠楀湪鏋佺淇′换澹佸瀿(90%+鐢ㄦ埛璁や负AI閰掑簵鏄櫛澶?涓嬩粠0鍒?鍐峰惎鍔ㄣ€傞€氳繃AI娲炲療椹卞姩+蹇冪悊瀛︾瓥鐣ワ紝3涓湀瀹炵幇鏈堟椿澧為暱28%銆佸璐巼12%鈫?0%銆佸紩娴佹垚鏈粎涓鸿涓氬潎鍊?0%銆?,metrics:[{val:'1500',lbl:'鏍稿績鏈堟椿(MAU)',note:'宄板€兼湀娲伙紝鎻愬崌28%'},{val:'12鍏?,lbl:'寮曟祦鎴愭湰/鍗?,note:'鐩爣鈮?0鍏冿紝琛屼笟80鍏?},{val:'30%',lbl:'澶嶈喘鐜?,note:'鍒濇湡12%缈诲€嶈嚦30%'},{val:'120+',lbl:'鏈堝潎AI鍐呭',note:'鏁堢巼鎻愬崌3鍊?}],
+details:[{icon:'馃搳',text:'鐖櫕閲囬泦12瀹禔I閰掑簵1200+鏉¤瘎璁猴紝NLP鍒嗘瀽鎻愬彇楂橀鍏抽敭璇嶏細"鍙嶅簲鎱?82娆°€?鎿嶄綔澶嶆潅"74娆°€?鍗庤€屼笉瀹?58娆★紝AI鑱氱被涓夊ぇ鏍稿績椤捐檻'},{icon:'馃敩',text:'R(鏈€杩戝叆浣?1鏈堝唴5鍒?1-3鏈?鍒?3鏈?1鍒?+F(棰戞:5娆?5鍒?2-4娆?鍒?1娆?鍒?+M(閲戦:5000+5鍒?1000-5000=3鍒?<1000=1鍒?銆傝緭鍑?灞傜敾鍍忥細鏍稿績瀛靛寲灞?鏅€氭縺娲诲眰/娌夌潯鍞ら啋灞?娌夐粯娴佸け灞?鏂扮敤鎴峰眰'},{icon:'馃懁',text:'鍟嗗姟鐢ㄦ埛(鏁堢巼浼樺厛/绉掔骇鍏ヤ綇/鏅鸿兘閫佺墿)+骞磋交娓稿(鏂板浣撻獙/AI鏃呮媿/绀句氦璐у竵)锛屽垎鍒尮閰嶆惡绋?椋炵尓涓庡皬绾功/鎶栭煶娓犻亾'},{icon:'馃',text:'AI鐢熶骇5姝ュ伐浣滄祦锛氶€夐鐢熸垚(AI浜?0閫?)鈫掍汉宸ョ‘璁も啋AI鍒濈(骞冲彴+浜虹兢+閫夐+椋庢牸)鈫掔簿璋?鍘籄I鐥曡抗+鍔犵湡瀹炴劅)鈫掑骞冲彴鍒嗗彂銆傛湀鍧?20+鏉?},{icon:'馃敟',text:'鎹熷け鍘屾伓锛氶璁㈤〉"浠婃棩浠呭墿X闂碅I鏅鸿兘鎴?瀹炴椂鍊掕鏃讹紝杞寲鐜囨彁鍗?5%銆傜ぞ浼氳鍚岋細宓屽叆浣忓鐪熷疄鎵嬫満鎷嶆憚鐨凙I瀹㈡埧浣撻獙瑙嗛(15-30绉?'},{icon:'馃搱',text:'鍏煙鈫掑姞浼佸井鈫掑叆缇ゆ杩?鏂颁汉99鍏冭瘯浣?鈫掔ぞ缇?闄愭椂鐗规儬)鈫?v1鎺ㄨ崘鈫掓牳閿€鈫掕瘎浠枫€傛杩庤/鍌崟璇?濂借瘎寮曞璇濇湳鍏ㄩ儴鏍囧噯鍖栧彲澶嶅埗'},{icon:'馃幆',text:'鏍稿績璇?AI閰掑簵/鏅鸿兘閰掑簵)+闀垮熬璇?[鍩庡競]AI閰掑簵鎺ㄨ崘)+鍦烘櫙璇?鍑哄樊浣忓摢/鎯呬荆绾︿細)+闂璇?闈犺氨鍚?璐典笉璐?锛岀煡涔?灏忕孩涔﹂棶绛斿竷灞€'}]},
+netease:{tag:'娓告垙',tagClass:'netease',company:'缃戞槗 路 2024.06 鈥?2024.09',title:'鐕曚簯 路 AI杈呭姪璇婃柇涓嶢/B瀹為獙',desc:'缃戞槗鏍稿績娓告垙"鐕曚簯"鏂扮敤鎴风暀瀛樹紭鍖栵紝娴佸け鐜?5%(鍚岀被鍧囧€肩害35%)銆傞€氳繃NLP鍒嗘瀽+鍏ㄩ摼璺涓烘紡鏂椾氦鍙夊畾浣嶆祦澶辨牴鍥狅紝3澶т紭鍖栨柟妗堝叏閮ㄩ€氳繃A/B娴嬭瘯骞跺叏閲忎笂绾裤€?,metrics:[{val:'55%鈫?0%',lbl:'娴佸け鐜囦笅闄?7%',note:'瀵圭収缁?5%鈫掍紭鍖栫粍40%'},{val:'45%鈫?0%',lbl:'娆℃棩鐣欏瓨+25pp',note:'鍙岀粍鍚?000浜篈/B娴嬭瘯'},{val:'10,000',lbl:'A/B鏍锋湰閲?,note:'鍙岀粍鐙珛锛屾帓闄ら噸澶?},{val:'+25%',lbl:'鍥㈤槦鏁堢巼',note:'瀹為獙妗嗘灦娌夋穩涓烘爣鍑嗘柟娉曡'}],
+details:[{icon:'馃搳',text:'浠庢敞鍐屽埌10绾х粏鍖栧埌姣忎釜浠诲姟/鍦板浘杞寲鐜囥€傚彂鐜?寮曞杩囬暱"鑰岄潪"闅惧害杩囬珮"鏄牴鍥犫€斺€旇涓烘暟鎹煡"鍝噷"娴佸け锛孨LP鎵嶇煡"涓轰粈涔?'},{icon:'馃攳',text:'鏁板崈鏉¤瘎璁衡啋鎯呮劅鍒嗘瀽鈫扵F-IDF楂橀璇嶁啋AI鑱氱被闂銆傚彂鐜伴珮棰戣瘝"寮曞澶暱"鑰岄潪"澶毦"锛岀珛鍗宠皟鏁翠紭鍖栨柟鍚?},{icon:'馃洜锔?,text:'鈶犲紩瀵艰烦杩囷細鍏佽璺宠繃鏂版墜寮曞锛?澶╁唴鍙洖鐪嬨€傗憽濂栧姳鍓嶇疆锛氬叧閿鍔变粠5绾ц皟鑷?绾с€傗憿闅惧害鏇茬嚎锛氬墠3绾ч檷闂ㄦ锛岄€愭閫掑'},{icon:'馃敩',text:'瀹為獙璁捐鈫掗殢鏈哄垎缁?鍙岀粍鍚?000浜烘帓閲?鈫掔洃鎺?缁熻鍔熸晥90%缃俊搴?鈫掑垎鏋?涓湡鏄捐憲鎬ф楠?鈫掓姤鍛?鍏ㄩ摼璺?缁撹)'},{icon:'馃搱',text:'缃戞槗鏈夋暟骞冲彴锛岃鐩栫暀瀛?娴佸け/浠诲姟/绀句氦鍥涘ぇ缁村害銆傜ぞ浜よ涓轰负鏍稿績杈呭姪鎸囨爣鈥斺€旀父鎴忕暀瀛橀潬绀句氦缁戝畾'},{icon:'馃',text:'琛屼负鏁版嵁鐭?鍝噷娴佸け"浣嗕笉鐭?涓轰粈涔?锛涚敤鎴峰弽棣堢煡"澶嶆潅"浣嗕笉鐭ュ叿浣撴搷浣溿€備袱鏂逛氦鍙夊畾浣嶇湡瀹炴祦澶辨牴鍥?}]},
+meituan:{tag:'绀惧尯鐢靛晢',tagClass:'meituan',company:'缇庡洟浼橀€?路 2021.10 鈥?2023.05',title:'AI璧嬭兘绉佸煙绀剧兢鍐峰惎鍔ㄤ笌澧為暱',desc:'澶у鏈熼棿鍒涗笟椤圭洰锛屼粠0鍒?鏋勫缓鏍″洯绉佸煙绀剧兢楠岃瘉"鏍″洯绉佸煙+绀惧尯鐢靛晢"妯″紡銆?鎵€楂樻牎鎵╁睍鍒?鎵€锛屾湀閿€鍞0鍒?0涓?锛屾ā寮忚鎬婚儴鍙傝€冦€?,metrics:[{val:'2500+',lbl:'绀剧兢瑙勬ā',note:'瑕嗙洊3鎵€楂樻牎锛屾椿璺?0%'},{val:'28%',lbl:'绀剧兢杞寲鐜?,note:'鍏ョ兢45000浜猴紝棣栧崟12600浜?},{val:'35%',lbl:'澶嶈喘鐜?,note:'楂樹簬骞冲彴鍧囧€?5pp'},{val:'10涓?',lbl:'鏈堝潎閿€鍞',note:'寮€瀛﹀宄板€?4.6涓?}],
+details:[{icon:'馃幆',text:'寮€瀛﹀7澶╄鐩?0%鏂扮敓銆傚湴鎺?椋熷爞/瀹胯垗/鏁欏妤?+绾夸笂(杞彂闆嗚禐/鏂扮敓浼樻儬)+绉嶅瓙鐢ㄦ埛(姣忔ゼ1涓ゼ闀挎笚閫忔帹骞?'},{icon:'馃摜',text:'鏍囧噯鍖栧叆缇も啋姣忔棩鎺掓湡(鏃╂姤/鎺ㄨ崘/娲诲姩)鈫掑懆鏈熸€ф椿鍔?鎷煎洟/绉掓潃/闆嗚禐)鈫掓爣鍑嗗寲璇濇湳搴撱€?500+绀剧兢鍏ㄩ摼璺鐞?},{icon:'馃敆',text:'鈶犳嫾鍥㈣鍙橈細1鍏冩嫾鍥?鍛?500绀剧兢 鈶¤€佸甫鏂帮細鍙屾柟浼樻儬鍒?鈶㈢ぞ浜よ鍙橈細闆嗚禐/瀹胯垗鎷煎崟 鈶ｇ垎鍝侀璀︼細3澶╅娴嬶紝3-5澶囬€?},{icon:'馃搳',text:'Excel+SQL鎼缓鑷姩鍖栨姤琛ㄣ€傝拷韪ぞ缇ゆ暟/娲昏穬鐜?杞寲鐜?澶嶈喘鐜?瀹㈠崟浠?閿€鍞6澶ф寚鏍囥€傚嘲鍊?4.6涓?鏈?},{icon:'馃攧',text:'鍦版帹琚┍璧垛啋鎵ゼ+绾夸笂瑁傚彉锛涘闀跨摱棰堚啋1鍏冩嫾鍥紱渚涘簲閾句笉绋斥啋鐖嗗搧棰勮+澶囬€夈€?鎵€绋冲畾鎵╁睍鑷?鎵€'},{icon:'馃挕',text:'鈶犲紩鍏oze Bot鑷姩鍥炲+鍒嗙兢瑙﹁揪鏁堢巼2鍊?鈶FM鍥涚被宸紓鍖栬繍钀ワ紝棰勬湡澶嶈喘35%鈫?5%+ 鈶㈠崐鑷姩鍖栫湅鏉跨渷5h/鍛?}]}};
 
-// ====== MODAL ======
-function openModal(p){var d=PD[p];if(!d)return;var h='<span class="modal-tag '+d.tc+'">'+d.tag+'</span><div class="modal-company">'+d.co+'</div><h2><span class="hl">'+d.ti+'</span></h2><p class="modal-desc">'+d.de+'</p><div class="modal-metrics">';d.me.forEach(function(m){h+='<div class="modal-metric"><div class="val">'+m.v+'</div><div class="lbl">'+m.l+'</div><div class="note">'+m.n+'</div></div>';});h+='</div><div class="modal-details">';d.dt.forEach(function(d2){h+='<div class="modal-detail-item"><span class="icon">'+d2.i+'</span><span class="text">'+d2.t+'</span></div>';});h+='</div>';document.getElementById('modalContent').innerHTML=h;document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';}
+function openModal(p){var d=projectData[p];if(!d)return;document.getElementById('modalContent').innerHTML='<span class="modal-tag '+d.tagClass+'">'+d.tag+'</span><div class="modal-company">'+d.company+'</div><h2><span class="hl">'+d.title+'</span></h2><p class="modal-desc">'+d.desc+'</p><div class="modal-metrics">'+d.metrics.map(function(m){return '<div class="modal-metric"><div class="val">'+m.val+'</div><div class="lbl">'+m.lbl+'</div><div class="note">'+m.note+'</div></div>'}).join('')+'</div><div class="modal-details">'+d.details.map(function(d){return '<div class="modal-detail-item"><span class="icon">'+d.icon+'</span><span class="text">'+d.text+'</span></div>'}).join('')+'</div>';document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';}
 function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===e.currentTarget)closeModal();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
 document.querySelectorAll('.project-card').forEach(function(c){c.addEventListener('click',function(){openModal(c.dataset.project);});});
 
-// ====== 🌠 DREAMY METEORS ======
+// Particles
+(function(){var c=document.getElementById('particle-canvas'),ctx=c.getContext('2d');var meteors=[],dust=[];var mx=-1e3,my=-1e3;
+function r(){c.width=window.innerWidth;c.height=window.innerHeight;}
+window.addEventListener('resize',r);r();
+function M(){this.reset();}M.prototype.reset=function(){this.x=Math.random()*c.width*1.4-c.width*0.2;this.y=-Math.random()*c.height*0.3-10;this.size=Math.random()*1.8+0.6;this.speed=0.6+Math.random()*1.2;var a=Math.PI*0.55+Math.random()*Math.PI*0.3;this.vx=Math.cos(a)*this.speed;this.vy=Math.sin(a)*this.speed;this.isGold=Math.random()>0.5;this.trail=[];this.max=Math.floor(14+Math.random()*12);this.op=Math.random()*0.18+0.08;this.ph=Math.random()*Math.PI*2;};
+M.prototype.update=function(t){this.vx+=Math.sin(t*0.002+this.ph)*0.004;this.trail.unshift({x:this.x,y:this.y});if(this.trail.length>this.max)this.trail.pop();this.x+=this.vx;this.y+=this.vy;var dx=this.x-mx,dy=this.y-my,d=Math.sqrt(dx*dx+dy*dy);if(d<150)this.op=Math.min(0.35,this.op+0.003);if(this.x<-80||this.x>c.width+80||this.y>c.height+50)this.reset();};
+M.prototype.draw=function(){if(this.trail.length<2)return;for(var i=1;i<this.trail.length;i++){var t0=this.trail[i-1],t1=this.trail[i];var r=1-(i/this.max);var a=this.op*r*0.85;var w=this.size*(0.2+r*0.8);ctx.beginPath();ctx.moveTo(t0.x,t0.y);ctx.lineTo(t1.x,t1.y);ctx.strokeStyle=this.isGold?'rgba(255,215,80,'+a+')':'rgba(100,200,255,'+a+')';ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();}
+if(this.trail.length>1){var prev=this.trail[1];var ang=Math.atan2(this.y-prev.y,this.x-prev.x);var hl=this.size*3,hw=this.size*0.5;ctx.save();ctx.translate(this.x,this.y);ctx.rotate(ang);ctx.shadowBlur=this.isGold?12:6;ctx.shadowColor=this.isGold?'rgba(255,215,80,0.15)':'rgba(100,200,255,0.1)';var g=ctx.createRadialGradient(0,0,0,0,0,hl);if(this.isGold){g.addColorStop(0,'rgba(255,240,180,'+(this.op*2.5)+')');g.addColorStop(0.2,'rgba(255,215,80,'+(this.op*1.8)+')');g.addColorStop(0.6,'rgba(212,175,55,'+(this.op*0.6)+')');g.addColorStop(1,'rgba(212,175,55,0)')}else{g.addColorStop(0,'rgba(200,240,255,'+(this.op*2)+')');g.addColorStop(0.3,'rgba(80,200,255,'+(this.op*1.2)+')');g.addColorStop(1,'rgba(0,113,227,0)')}
+ctx.beginPath();ctx.ellipse(0,0,hl,hw,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.shadowBlur=0;ctx.restore()}};
+function D(){this.x=Math.random()*c.width;this.y=Math.random()*c.height;this.s=Math.random()*0.6+0.2;this.bo=Math.random()*0.03+0.01;this.ps=Math.random()*0.008+0.002;this.off=Math.random()*Math.PI*2;this.dx=(Math.random()-0.5)*0.04;this.dy=(Math.random()-0.5)*0.04;}
+D.prototype.update=function(t){this.x+=this.dx;this.y+=this.dy;this.o=this.bo+Math.sin(t*this.ps+this.off)*0.015;if(this.x<-10)this.x=c.width+10;if(this.x>c.width+10)this.x=-10;if(this.y<-10)this.y=c.height+10;if(this.y>c.height+10)this.y=-10;};
+D.prototype.draw=function(){ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,Math.PI*2);ctx.fillStyle='rgba(212,175,55,'+Math.max(0,this.o)+')';ctx.fill();};
+var mcnt=Math.min(48,Math.floor(c.width*c.height/20000));for(var i=0;i<mcnt;i++){var m=new M();m.y=-Math.random()*c.height*0.7;m.op=Math.random()*0.12+0.08;meteors.push(m);}
+var dcnt=Math.min(30,Math.floor(c.width*c.height/40000));for(i=0;i<dcnt;i++)dust.push(new D());
+var aid;function ani(t){ctx.clearRect(0,0,c.width,c.height);dust.forEach(function(d){d.update(t||0);d.draw();});meteors.forEach(function(m){m.update(t||0);m.draw();});aid=requestAnimationFrame(ani);}
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});document.addEventListener('visibilitychange',function(){if(document.hidden)cancelAnimationFrame(aid);else ani();});ani();})();
 
-
-// ====== OBSERVER ======
-var ob=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');if(e.target.id&&e.target.id.indexOf('chart')>=0)initCharts();}});},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+// Observer
+var ob=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');if(e.target.classList.contains('chart-box'))initCharts();}});},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
 document.querySelectorAll('.project-card,.chart-box,.data-wall-item,.timeline-item,.skill-category,.sop-card').forEach(function(el){ob.observe(el);});
 
-// ====== COUNT UP ======
+// CountUp
 var co=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){var el=e.target,t=parseInt(el.dataset.target),cur=0,st=Math.ceil(t/60);var int=setInterval(function(){cur+=st;if(cur>=t){cur=t;clearInterval(int);}el.textContent=cur+(el.textContent.endsWith('%')?'%':'+');},20);co.unobserve(el);}});},{threshold:0.5});
 document.querySelectorAll('.hero-stat .num[data-target]').forEach(function(el){co.observe(el);});
 
-// ====== NAV ======
-var ls=0;window.addEventListener('scroll',function(){var c=window.scrollY;document.querySelector('nav').style.transform=c>ls&&c>100?'translateY(-100%)':'translateY(0)';ls=c;},{passive:true});
+// Nav
+var ls=0;
+window.addEventListener('scroll',function(){var c=window.scrollY;document.querySelector('nav').style.transform=c>ls&&c>100?'translateY(-100%)':'translateY(0)';ls=c;},{passive:true});
 
-// ====== SCROLL PROGRESS ======
-window.addEventListener('scroll',function(){var s=window.scrollY,m=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('scrollProgress').style.width=Math.min(100,s/m*100)+'%';},{passive:true});
-
-// ====== HERO 3D ======
-var ht=document.getElementById('heroTitle');if(ht){document.querySelector('.hero').addEventListener('mousemove',function(e){var r=this.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-0.5,y=(e.clientY-r.top)/r.height-0.5;ht.style.transform='rotateY('+(x*8)+'deg) rotateX('+(-y*6)+'deg)';});document.querySelector('.hero').addEventListener('mouseleave',function(){ht.style.transform='rotateY(0deg) rotateX(0deg)';});}
-
-// ====== CHARTS ======
-var chartInit=false;
-function initCharts(){if(chartInit||typeof Chart==='undefined')return;chartInit=true;
+// Charts
+var chartsInit=false;
+function initCharts(){if(chartsInit)return;chartsInit=true;
 var _c={blue:'#0071e3',gold:'#d4af37',red:'#d93025',green:'#137333',text:'#6e6e73'};Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif";Chart.defaults.font.size=11;Chart.defaults.color=_c.text;
 function _g(c,c1,c2){var g=c.createLinearGradient(0,0,0,280);g.addColorStop(0,c1);g.addColorStop(1,c2);return g;}
-try{var c1=document.getElementById('chartBar').getContext('2d');new Chart(c1,{type:'bar',data:{labels:['势行','网易','美团'],datasets:[{label:'核心转化率(%)',data:[28,27,28],backgroundColor:_g(c1,'rgba(212,175,55,0.25)','rgba(212,175,55,0.08)'),borderColor:_c.gold,borderWidth:2,borderRadius:6,borderSkipped:false},{label:'规模(千)',data:[1.5,10,2.5],backgroundColor:_g(c1,'rgba(0,113,227,0.35)','rgba(0,113,227,0.12)'),borderColor:_c.blue,borderWidth:2,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:true,animation:{duration:1200,easing:'easeOutQuart'},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:function(v){return v+(v>5?'k':'%')}}},x:{grid:{display:false}}}}});}catch(e){console.log('chart1',e);}
-try{var c2=document.getElementById('chartDoughnut').getContext('2d');new Chart(c2,{type:'doughnut',data:{labels:['优化前(55%)','优化后(40%)','留存提升'],datasets:[{data:[55,40,5],backgroundColor:[_g(c2,'rgba(217,48,37,0.7)','rgba(217,48,37,0.3)'),_g(c2,'rgba(19,115,51,0.7)','rgba(19,115,51,0.3)'),_g(c2,'rgba(212,175,55,0.2)','rgba(212,175,55,0.05)')],borderColor:[_c.red,_c.green,_c.gold],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:true,cutout:'62%',animation:{animateRotate:true,duration:1500,easing:'easeOutQuart'},plugins:{legend:{position:'bottom',labels:{usePointStyle:true,padding:16}},tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed+'%'}}}}});}catch(e){console.log('chart2',e);}
-try{var c3=document.getElementById('chartRetention').getContext('2d');new Chart(c3,{type:'bar',data:{labels:['次日留存'],datasets:[{label:'优化前',data:[45],backgroundColor:'rgba(217,48,37,0.6)',borderColor:_c.red,borderWidth:2,borderRadius:6},{label:'优化后',data:[70],backgroundColor:'rgba(19,115,51,0.6)',borderColor:_c.green,borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',animation:{duration:1200,easing:'easeOutQuart'},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},scales:{x:{beginAtZero:true,max:100,grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});}catch(e){console.log('chart3',e);}
-try{var c4=document.getElementById('chartFunnel').getContext('2d');new Chart(c4,{type:'bar',data:{labels:['入群用户','完成首单','复购用户'],datasets:[{label:'转化人数',data:[45000,12600,4410],backgroundColor:[_g(c4,'rgba(0,113,227,0.5)','rgba(0,113,227,0.2)'),_g(c4,'rgba(0,113,227,0.7)','rgba(0,113,227,0.4)'),_g(c4,'rgba(212,175,55,0.6)','rgba(212,175,55,0.3)')],borderColor:[_c.blue,_c.blue,_c.gold],borderWidth:2,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',animation:{duration:1200,easing:'easeOutQuart'},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed.toLocaleString()+'人'}}}},scales:{x:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:function(v){return v>=10000?(v/10000).toFixed(1)+'万':v}}},y:{grid:{display:false}}}}});}catch(e){console.log('chart4',e);}
-try{var c5=document.getElementById('chartRadar').getContext('2d');new Chart(c5,{type:'radar',data:{labels:['数据分析','AI工具','运营策略','产品思维','实验验证','用户洞察'],datasets:[{label:'能力评估',data:[92,90,90,78,88,85],backgroundColor:'rgba(212,175,55,0.08)',borderColor:_c.gold,borderWidth:2,pointBackgroundColor:[_c.blue,_c.gold,_c.blue,_c.gold,_c.blue,_c.gold],pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:6,pointHoverRadius:8}]},options:{responsive:true,maintainAspectRatio:true,animation:{duration:1500,easing:'easeOutQuart'},scales:{r:{beginAtZero:true,max:100,ticks:{stepSize:20,font:{size:10},backdropColor:'transparent'},grid:{color:'rgba(0,0,0,0.06)'},angleLines:{color:'rgba(0,0,0,0.06)'},pointLabels:{font:{size:11,weight:'500'}}}},plugins:{legend:{display:false}}}}});}catch(e){console.log('chart5',e);}}
-
-// Fallback: if scroll doesn't trigger charts, init on load
-setTimeout(initCharts, 2000);
-// Also init immediately if chart-box is already visible
-if(document.querySelector('.chart-box.visible'))initCharts();
+var c1=document.getElementById('chartBar').getContext('2d');new Chart(c1,{type:'bar',data:{labels:['鍔胯','缃戞槗','缇庡洟'],datasets:[{label:'鏍稿績杞寲鐜?%)',data:[28,27,28],backgroundColor:_g(c1,'rgba(212,175,55,0.25)','rgba(212,175,55,0.08)'),borderColor:_c.gold,borderWidth:2,borderRadius:6,borderSkipped:false},{label:'瑙勬ā(鍗?',data:[1.5,10,2.5],backgroundColor:_g(c1,'rgba(0,113,227,0.35)','rgba(0,113,227,0.12)'),borderColor:_c.blue,borderWidth:2,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:true,animation:{duration:1200,easing:'easeOutQuart'},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:function(v){return v+(v>5?'k':'%')}}},x:{grid:{display:false}}}}});
+var c2=document.getElementById('chartDoughnut').getContext('2d');new Chart(c2,{type:'doughnut',data:{labels:['浼樺寲鍓?55%)','浼樺寲鍚?40%)','鐣欏瓨鎻愬崌'],datasets:[{data:[55,40,5],backgroundColor:[_g(c2,'rgba(217,48,37,0.7)','rgba(217,48,37,0.3)'),_g(c2,'rgba(19,115,51,0.7)','rgba(19,115,51,0.3)'),_g(c2,'rgba(212,175,55,0.2)','rgba(212,175,55,0.05)')],borderColor:[_c.red,_c.green,_c.gold],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:true,cutout:'62%',animation:{animateRotate:true,duration:1500,easing:'easeOutQuart'},plugins:{legend:{position:'bottom',labels:{usePointStyle:true,padding:16}},tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed+'%'}}}}}});
+var c3=document.getElementById('chartRetention').getContext('2d');new Chart(c3,{type:'bar',data:{labels:['娆℃棩鐣欏瓨'],datasets:[{label:'浼樺寲鍓?,data:[45],backgroundColor:'rgba(217,48,37,0.6)',borderColor:_c.red,borderWidth:2,borderRadius:6},{label:'浼樺寲鍚?,data:[70],backgroundColor:'rgba(19,115,51,0.6)',borderColor:_c.green,borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',animation:{duration:1200,easing:'easeOutQuart'},plugins:{legend:{position:'top',labels:{usePointStyle:true,padding:16}}},scales:{x:{beginAtZero:true,max:100,grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});
+var c4=document.getElementById('chartFunnel').getContext('2d');new Chart(c4,{type:'bar',data:{labels:['鍏ョ兢鐢ㄦ埛','瀹屾垚棣栧崟','澶嶈喘鐢ㄦ埛'],datasets:[{label:'杞寲浜烘暟',data:[45000,12600,4410],backgroundColor:[_g(c4,'rgba(0,113,227,0.5)','rgba(0,113,227,0.2)'),_g(c4,'rgba(0,113,227,0.7)','rgba(0,113,227,0.4)'),_g(c4,'rgba(212,175,55,0.6)','rgba(212,175,55,0.3)')],borderColor:[_c.blue,_c.blue,_c.gold],borderWidth:2,borderRadius:6,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:true,indexAxis:'y',animation:{duration:1200,easing:'easeOutQuart'},plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.label+': '+ctx.parsed.toLocaleString()+'浜?}}}},scales:{x:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'},ticks:{callback:function(v){return v>=10000?(v/10000).toFixed(1)+'涓?:v}}},y:{grid:{display:false}}}}});
+var c5=document.getElementById('chartRadar').getContext('2d');new Chart(c5,{type:'radar',data:{labels:['鏁版嵁鍒嗘瀽','AI宸ュ叿','杩愯惀绛栫暐','浜у搧鎬濈淮','瀹為獙楠岃瘉','鐢ㄦ埛娲炲療'],datasets:[{label:'鑳藉姏璇勪及',data:[92,90,90,78,88,85],backgroundColor:'rgba(212,175,55,0.08)',borderColor:_c.gold,borderWidth:2,pointBackgroundColor:[_c.blue,_c.gold,_c.blue,_c.gold,_c.blue,_c.gold],pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:6,pointHoverRadius:8}]},options:{responsive:true,maintainAspectRatio:true,animation:{duration:1500,easing:'easeOutQuart'},scales:{r:{beginAtZero:true,max:100,ticks:{stepSize:20,font:{size:10},backdropColor:'transparent'},grid:{color:'rgba(0,0,0,0.06)'},angleLines:{color:'rgba(0,0,0,0.06)'},pointLabels:{font:{size:11,weight:'500'}}}},plugins:{legend:{display:false}}}});}
 </script>
 </body>
 </html>
